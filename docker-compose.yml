@@ -39,3 +39,4 @@ services:
 networks:
   deploynode-internal:
     driver: bridge
+    name: deploynode-internal
