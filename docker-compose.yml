@@ -6,7 +6,7 @@ services:
     networks:
       - deploynode-internal
   caddy:
-    image: caddy/latest
+    image: caddy:latest
     ports:
       - "80:80"
     volumes:
