@@ -6,8 +6,14 @@ services:
     command:
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
+      # HTTP entrypoint with global redirect to HTTPS
       - "--entrypoints.web.address=:80"
+      - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entryPoint.scheme=https"
+      - "--entrypoints.web.http.redirections.entryPoint.permanent=true"
+      # HTTPS entrypoint
       - "--entrypoints.websecure.address=:443"
+      # Let's Encrypt via TLS challenge
       - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
       - "--certificatesresolvers.myresolver.acme.email=gopal@gopalchoudhary.dev"
       - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
@@ -26,6 +32,7 @@ services:
       - deploynode-internal
     labels:
       - "traefik.enable=true"
+      # HTTPS router only (HTTP is redirected globally above)
       - "traefik.http.routers.nodejs.rule=Host(`ex.gopalchoudhary.dev`)"
       - "traefik.http.routers.nodejs.entrypoints=websecure"
       - "traefik.http.routers.nodejs.tls.certresolver=myresolver"
