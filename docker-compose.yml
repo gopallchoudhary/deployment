@@ -10,7 +10,7 @@ services:
     ports:
       - "80:80"
     volumes:
-      - ./Caddyfile:/etc/caddy/CaddyFile:ro
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
     networks:
       - deploynode-internal
 
