@@ -1,0 +1,19 @@
+services:
+  nodejs-server:
+    image: gopalchoudhary/deployment-node
+    deploy:
+      replicas: 5
+    networks:
+      - deploynode-internal
+  caddy:
+    image: caddy/latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./Caddyfile:/etc/caddy/CaddyFile:ro
+    networks:
+      - deploynode-internal
+
+networks:
+  deploynode-internal:
+    driver: bridge

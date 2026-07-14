@@ -37,14 +37,17 @@ jobs:
           username: ubuntu
           key: ${{secrets.PRIVATE_KEY}}
           script: |
-            # Kill the existing docker container
-            sudo docker rm -f deployment-node || true
+            # CD /home/ubuntu/deployment
+            cd /home/ubuntu/deployment
 
-            # Pull the fresh image from docker hub
-            sudo docker pull gopalchoudhary/deployment-node
+            # git pull
+            git pull origin main
 
-            # Run docker -d -p 8000:8000 gopalchoudhary/deployment-node
-            sudo docker run -d --name deployment-node --restart unless-stopped -p 80:8000 gopalchoudhary/deployment-node
+            # make sure to pull a fresh copy of gopalchoudhary/deployment-node
+            sudo docker compose pull
+
+            # docker compose up -d
+            sudo docker compose up -d
 
             # Clean up old/unused images
             sudo docker image prune -f
