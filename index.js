@@ -5,8 +5,8 @@ const port = process.env.PORT ?? 8000;
 
 app.get("/", (req, res) => {
 	return res.json({
-		message: "Server is healthy v3.1",
-		status: "Github Actions Hurrayyy!",
+		message: "Server is healthy v5.1",
+		status: "Docker Github Actions 🐳",
 		what: "Docker",
 	});
 });
