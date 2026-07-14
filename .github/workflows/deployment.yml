@@ -44,7 +44,7 @@ jobs:
             sudo docker pull gopalchoudhary/deployment-node
 
             # Run docker -d -p 8000:8000 gopalchoudhary/deployment-node
-            sudo docker run -d --name deployment-node --restart unless-stopped -p 8000:8000 gopalchoudhary/deployment-node
+            sudo docker run -d --name deployment-node --restart unless-stopped -p 80:8000 gopalchoudhary/deployment-node
 
             # Clean up old/unused images
             sudo docker image prune -f
