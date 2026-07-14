@@ -1,19 +1,33 @@
 services:
+  traefik:
+    image: traefik:v3.1
+    command:
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
+      - "--certificatesresolvers.myresolver.acme.email=gopal@gopalchoudhary.dev"
+      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./letsencrypt:/letsencrypt
+    networks:
+      - deploynode-internal
+
   nodejs-server:
     image: gopalchoudhary/deployment-node
-    deploy:
-      replicas: 5
     networks:
       - deploynode-internal
-  caddy:
-    image: caddy:latest
-    ports:
-      - '80:80'
-      - '443:443'
-    volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile:ro
-    networks:
-      - deploynode-internal
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.nodejs.rule=Host(`ex.gopalchoudhary.dev`)"
+      - "traefik.http.routers.nodejs.entrypoints=websecure"
+      - "traefik.http.routers.nodejs.tls.certresolver=myresolver"
+      - "traefik.http.services.nodejs.loadbalancer.server.port=8000"
 
 networks:
   deploynode-internal:
